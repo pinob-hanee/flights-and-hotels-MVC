@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:2000/api';
+const API_URL = 'https://flights-and-hotels-mvc-72cw.vercel.app/';
 
 const getAuthHeader = () => {
   const token = localStorage.getItem('token');
