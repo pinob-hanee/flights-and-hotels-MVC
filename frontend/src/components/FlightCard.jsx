@@ -1,25 +1,28 @@
-import { Plane, Clock, Calendar, ArrowRight, Tag } from 'lucide-react';
-import { useState } from 'react';
+import { Plane, Clock, Calendar, ArrowRight, Tag } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function FlightCard({ flight, onBook, loading }) {
   const [showDetails, setShowDetails] = useState(false);
   const segment = flight.itineraries?.[0]?.segments?.[0];
   const departure = segment?.departure;
   const arrival = segment?.arrival;
+  const navigate = useNavigate();
+
   const price = flight.price;
 
   const formatTime = (dateString) => {
-    return new Date(dateString).toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(dateString).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -57,11 +60,15 @@ export default function FlightCard({ flight, onBook, loading }) {
         {/* Route */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex-1">
-            <p className="text-3xl font-bold text-gray-800">{departure?.iataCode}</p>
-            <p className="text-sm text-gray-500 mt-1">{formatTime(departure?.at)}</p>
+            <p className="text-3xl font-bold text-gray-800">
+              {departure?.iataCode}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              {formatTime(departure?.at)}
+            </p>
             <p className="text-xs text-gray-400">{formatDate(departure?.at)}</p>
           </div>
-          
+
           <div className="flex-1 flex flex-col items-center px-4">
             <div className="flex items-center gap-2 text-indigo-600 mb-1">
               <div className="w-2 h-2 rounded-full bg-indigo-600"></div>
@@ -75,10 +82,14 @@ export default function FlightCard({ flight, onBook, loading }) {
               {parseDuration(flight.itineraries?.[0]?.duration)}
             </p>
           </div>
-          
+
           <div className="flex-1 text-right">
-            <p className="text-3xl font-bold text-gray-800">{arrival?.iataCode}</p>
-            <p className="text-sm text-gray-500 mt-1">{formatTime(arrival?.at)}</p>
+            <p className="text-3xl font-bold text-gray-800">
+              {arrival?.iataCode}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              {formatTime(arrival?.at)}
+            </p>
             <p className="text-xs text-gray-400">{formatDate(arrival?.at)}</p>
           </div>
         </div>
@@ -88,7 +99,7 @@ export default function FlightCard({ flight, onBook, loading }) {
           onClick={() => setShowDetails(!showDetails)}
           className="text-indigo-600 text-sm font-medium mb-4 hover:underline"
         >
-          {showDetails ? 'Hide Details' : 'Show Details'}
+          {showDetails ? "Hide Details" : "Show Details"}
         </button>
 
         {showDetails && (
@@ -99,11 +110,17 @@ export default function FlightCard({ flight, onBook, loading }) {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Cabin:</span>
-              <span className="font-medium capitalize">{flight.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin}</span>
+              <span className="font-medium capitalize">
+                {flight.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Available Seats:</span>
-              <span className="font-medium">{segment?.numberOfStops === 0 ? 'Non-stop' : `${segment?.numberOfStops} stop(s)`}</span>
+              <span className="font-medium">
+                {segment?.numberOfStops === 0
+                  ? "Non-stop"
+                  : `${segment?.numberOfStops} stop(s)`}
+              </span>
             </div>
           </div>
         )}
@@ -115,7 +132,8 @@ export default function FlightCard({ flight, onBook, loading }) {
             <div>
               <p className="text-xs text-gray-600">Total Price</p>
               <p className="text-3xl font-bold text-indigo-600">
-                {price?.total} <span className="text-lg">{price?.currency}</span>
+                {price?.total}{" "}
+                <span className="text-lg">{price?.currency}</span>
               </p>
             </div>
           </div>
@@ -123,21 +141,11 @@ export default function FlightCard({ flight, onBook, loading }) {
 
         {/* Book Button */}
         <button
-          onClick={() => onBook(flight)}
-          disabled={loading}
+          onClick={() => navigate("/flight-details", { state: { flight } })}
           className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl hover:shadow-xl hover:scale-105 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
         >
-          {loading ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              Booking...
-            </>
-          ) : (
-            <>
-              Book This Flight
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </>
-          )}
+          View Details & Book
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
     </div>

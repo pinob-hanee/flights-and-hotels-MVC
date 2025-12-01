@@ -1,10 +1,21 @@
-import { Building2, MapPin, Calendar, Users, Tag, Bed, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import {
+  Building2,
+  MapPin,
+  Calendar,
+  Users,
+  Tag,
+  Bed,
+  ArrowRight,
+} from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function HotelCard({ hotel, onBook, loading }) {
   const [showDetails, setShowDetails] = useState(false);
   const hotelInfo = hotel.hotel;
   const offer = hotel.offers?.[0];
+  const navigate = useNavigate();
+
 
   const calculateNights = () => {
     if (!offer?.checkInDate || !offer?.checkOutDate) return 0;
@@ -26,7 +37,9 @@ export default function HotelCard({ hotel, onBook, loading }) {
             <Building2 className="w-6 h-6" />
           </div>
           <div className="flex-1">
-            <h3 className="font-bold text-lg line-clamp-1">{hotelInfo?.name || 'Hotel'}</h3>
+            <h3 className="font-bold text-lg line-clamp-1">
+              {hotelInfo?.name || "Hotel"}
+            </h3>
             <div className="flex items-center gap-2 mt-1">
               <MapPin className="w-4 h-4" />
               <p className="text-sm opacity-90">{hotelInfo?.cityCode}</p>
@@ -51,33 +64,38 @@ export default function HotelCard({ hotel, onBook, loading }) {
             <div className="mb-4 p-4 bg-purple-50 rounded-xl">
               <div className="flex items-center gap-2 mb-3">
                 <Calendar className="w-5 h-5 text-purple-600" />
-                <span className="font-semibold text-gray-800">Stay Details</span>
+                <span className="font-semibold text-gray-800">
+                  Stay Details
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-gray-500 mb-1">Check-in</p>
                   <p className="font-semibold text-gray-800">
-                    {new Date(offer.checkInDate).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      day: 'numeric',
-                      year: 'numeric'
+                    {new Date(offer.checkInDate).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
                     })}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-500 mb-1">Check-out</p>
                   <p className="font-semibold text-gray-800">
-                    {new Date(offer.checkOutDate).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      day: 'numeric',
-                      year: 'numeric'
+                    {new Date(offer.checkOutDate).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
                     })}
                   </p>
                 </div>
               </div>
               <div className="mt-3 pt-3 border-t border-purple-200">
                 <p className="text-sm text-gray-600">
-                  <span className="font-semibold text-purple-600">{nights}</span> {nights === 1 ? 'night' : 'nights'}
+                  <span className="font-semibold text-purple-600">
+                    {nights}
+                  </span>{" "}
+                  {nights === 1 ? "night" : "nights"}
                 </p>
               </div>
             </div>
@@ -89,32 +107,41 @@ export default function HotelCard({ hotel, onBook, loading }) {
                   onClick={() => setShowDetails(!showDetails)}
                   className="text-purple-600 text-sm font-medium mb-2 hover:underline"
                 >
-                  {showDetails ? 'Hide Room Details' : 'Show Room Details'}
+                  {showDetails ? "Hide Room Details" : "Show Room Details"}
                 </button>
-                
+
                 {showDetails && (
                   <div className="p-4 bg-gray-50 rounded-lg space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <Bed className="w-4 h-4 text-gray-600" />
                       <span className="text-gray-600">Room Type:</span>
-                      <span className="font-medium capitalize">{offer.room.typeEstimated.category}</span>
+                      <span className="font-medium capitalize">
+                        {offer.room.typeEstimated.category}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Bed className="w-4 h-4 text-gray-600" />
                       <span className="text-gray-600">Beds:</span>
-                      <span className="font-medium">{offer.room.typeEstimated.beds}</span>
+                      <span className="font-medium">
+                        {offer.room.typeEstimated.beds}
+                      </span>
                     </div>
                     {offer.room.typeEstimated.bedType && (
                       <div className="flex items-center gap-2">
                         <Bed className="w-4 h-4 text-gray-600" />
                         <span className="text-gray-600">Bed Type:</span>
-                        <span className="font-medium capitalize">{offer.room.typeEstimated.bedType}</span>
+                        <span className="font-medium capitalize">
+                          {offer.room.typeEstimated.bedType}
+                        </span>
                       </div>
                     )}
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-gray-600" />
                       <span className="text-gray-600">Guests:</span>
-                      <span className="font-medium">{offer.guests?.adults || 1} {offer.guests?.adults === 1 ? 'Adult' : 'Adults'}</span>
+                      <span className="font-medium">
+                        {offer.guests?.adults || 1}{" "}
+                        {offer.guests?.adults === 1 ? "Adult" : "Adults"}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -128,11 +155,13 @@ export default function HotelCard({ hotel, onBook, loading }) {
                 <div>
                   <p className="text-xs text-gray-600">Total Price</p>
                   <p className="text-3xl font-bold text-purple-600">
-                    {offer.price?.total} <span className="text-lg">{offer.price?.currency}</span>
+                    {offer.price?.total}{" "}
+                    <span className="text-lg">{offer.price?.currency}</span>
                   </p>
                   {nights > 0 && (
                     <p className="text-xs text-gray-500 mt-1">
-                      ~{(parseFloat(offer.price?.total) / nights).toFixed(2)} {offer.price?.currency} per night
+                      ~{(parseFloat(offer.price?.total) / nights).toFixed(2)}{" "}
+                      {offer.price?.currency} per night
                     </p>
                   )}
                 </div>
@@ -143,21 +172,11 @@ export default function HotelCard({ hotel, onBook, loading }) {
 
         {/* Book Button */}
         <button
-          onClick={() => onBook(hotel)}
-          disabled={loading}
+          onClick={() => navigate("/hotel-details", { state: { hotel } })}
           className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl hover:shadow-xl hover:scale-105 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
         >
-          {loading ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              Booking...
-            </>
-          ) : (
-            <>
-              Book This Hotel
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </>
-          )}
+          View Details & Book
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
     </div>
